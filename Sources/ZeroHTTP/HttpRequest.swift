@@ -7,8 +7,8 @@
 import Foundation
 
 public struct HttpRequest {
-    let method: HttpMethod
-    let path: String
-    let headers: [String: String]
-    let body: Data?
+    public let method: HttpMethod
+    public let path: String
+    public let headers: [String: String]
+    public let body: Data?
 }

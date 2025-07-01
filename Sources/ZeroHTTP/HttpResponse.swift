@@ -7,7 +7,7 @@
 
 import Foundation
 import NIOHTTP1
-import ZeroTemplate // <--- Wichtig!
+import ZeroTemplate
 
 public struct HttpResponse {
     public let status: HTTPResponseStatus

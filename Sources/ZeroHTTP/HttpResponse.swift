@@ -18,7 +18,7 @@ public struct HttpResponse {
     public let status: HTTPResponseStatus
     
     /// The HTTP headers to be sent with the response.
-    public var headers: HTTPHeaders
+    public var headers: HttpHeaders
     
     /// The body of the response as a `String`.
     public let body: String
@@ -34,7 +34,7 @@ public struct HttpResponse {
     public init(status: HTTPResponseStatus = .ok, body: String) {
         self.status = status
         self.body = body
-        self.headers = HTTPHeaders()
+        self.headers = HttpHeaders()
         self.headers.add(name: "Content-Type", value: "text/plain; charset=utf-8")
     }
 
@@ -44,7 +44,7 @@ public struct HttpResponse {
     ///   - status: The HTTP status for the response.
     ///   - headers: A dictionary of `HTTPHeaders` for the response.
     ///   - body: The string content of the response body.
-    public init(status: HTTPResponseStatus, headers: HTTPHeaders, body: String) {
+    public init(status: HTTPResponseStatus, headers: HttpHeaders, body: String) {
         self.status = status
         self.headers = headers
         self.body = body
@@ -70,7 +70,7 @@ public func View(_ filename: String) -> HttpResponse {
 
     do {
         let htmlContent = try String(contentsOfFile: filePath, encoding: .utf8)
-        var headers = HTTPHeaders()
+        var headers = HttpHeaders()
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
 
         return HttpResponse(status: .ok, headers: headers, body: htmlContent)
@@ -107,7 +107,7 @@ public func render(_ filename: String, context: TemplateContext = [:]) -> HttpRe
         let fullFilename = "\(filename).html.zero"
         let renderedHTML = try templateRenderer.render(filename: fullFilename, context: context)
         
-        var headers = HTTPHeaders()
+        var headers = HttpHeaders()
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
         return HttpResponse(status: .ok, headers: headers, body: renderedHTML)
     } catch {

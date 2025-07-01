@@ -9,19 +9,15 @@ import Foundation
 
 /// A structure that represents a collection of HTTP headers.
 ///
-/// This implementation handles header keys in a case-insensitive manner,
-/// as required by the HTTP specification. It provides an easy-to-use,
-/// dictionary-like interface for managing headers.
-public struct HttpHeaders {
+/// This implementation handles header keys in a case-insensitive manner by
+/// normalizing all keys to lowercase for storage and retrieval. It also enforces
+/// that both header names and values consist of ASCII characters.
+public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
+    
+    
 
-    /// Internal storage for the headers. The keys are normalized to lowercase
-    /// to ensure case-insensitivity, while the original casing of the key is preserved.
-    private var storage: [String: (originalKey: String, value: String)] = [:]
-
-    /// An array of all header names in their original casing.
-    public var names: [String] {
-        return storage.values.map { $0.originalKey }
-    }
+    /// Internal storage for the headers. Keys are always stored in lowercase.
+    private var storage: [String: String] = [:]
 
     /// Initializes an empty `HttpHeaders` collection.
     public init() {}
@@ -33,26 +29,36 @@ public struct HttpHeaders {
             self.add(name: key, value: value)
         }
     }
+    
+    /// Initializes `HttpHeaders` from a dictionary literal (e.g., `[:]` or `["Content-Type": "application/json"]`).
+    public init(dictionaryLiteral elements: (String, String)...) {
+        for (key, value) in elements {
+            self.add(name: key, value: value)
+        }
+    }
 
     /// Adds a new header or updates an existing one.
     ///
-    /// If a header with the same name (case-insensitive) already exists,
-    /// its value will be replaced with the new value.
+    /// The header name is treated as case-insensitive. This method will trigger
+    /// a precondition failure if the name or value contain non-ASCII characters.
     ///
     /// - Parameters:
-    ///   - name: The name of the header (e.g., "Content-Type").
-    ///   - value: The value of the header.
+    ///   - name: The name of the header (e.g., "Content-Type"). Must be ASCII.
+    ///   - value: The value of the header. Must be ASCII.
     public mutating func add(name: String, value: String) {
-        let normalizedKey = name.lowercased()
-        storage[normalizedKey] = (originalKey: name, value: value)
+        // HIER IST DIE ÄNDERUNG:
+        // Erzwinge, dass Header-Namen und -Werte ASCII-konform sind.
+        precondition(!name.utf8.contains(where: { !$0.isASCII }), "HTTP header name must contain only ASCII characters.")
+        precondition(!value.utf8.contains(where: { !$0.isASCII }), "HTTP header value must contain only ASCII characters.")
+        
+        storage[name.lowercased()] = value
     }
 
     /// Removes a header by its name.
     ///
     /// - Parameter name: The case-insensitive name of the header to remove.
     public mutating func remove(name: String) {
-        let normalizedKey = name.lowercased()
-        storage[normalizedKey] = nil
+        storage[name.lowercased()] = nil
     }
 
     /// Checks if a header with the given name exists.
@@ -73,7 +79,7 @@ public struct HttpHeaders {
     /// ```
     public subscript(name: String) -> String? {
         get {
-            return storage[name.lowercased()]?.value
+            return storage[name.lowercased()]
         }
         set {
             if let value = newValue {
@@ -85,3 +91,8 @@ public struct HttpHeaders {
     }
 }
 
+extension UInt8 {
+    fileprivate var isASCII: Bool {
+        self <= 127
+    }
+}

@@ -20,6 +20,11 @@ jobs:
     # Der Job läuft auf einem von GitHub bereitgestellten virtuellen Server mit Ubuntu.
     runs-on: ubuntu-latest
 
+    # HIER IST DIE KORREKTUR:
+    # Wir müssen der Action explizit die Berechtigung geben, Releases zu erstellen.
+    permissions:
+      contents: write
+
     # Definiert die einzelnen Schritte, die im Job ausgeführt werden.
     steps:
       # Schritt 1: Code auschecken

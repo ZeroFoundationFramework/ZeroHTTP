@@ -10,8 +10,8 @@ on:
     # Der Workflow wird aber NUR ausgeführt, wenn der Push einen Tag betrifft.
     tags:
       # Wir filtern die Tags, damit die Action nur bei Versionstags wie
-      # v1.0.0, v1.2.3, v2.0.0-beta etc. ausgelöst wird.
-      - 'v*'
+      # 1.0.0, 1.2.3, 2.0.0-beta etc. ausgelöst wird.
+      - '*'
 
 # Definiert die Aufgaben (Jobs), die im Workflow ausgeführt werden.
 jobs:

@@ -11,4 +11,16 @@ public struct HttpRequest {
     public let path: String
     public let headers: [String: String]
     public let body: Data?
+    
+    public init(
+        method: HttpMethod,
+        path: String,
+        headers: [String: String] = [:],
+        body: Data? = nil
+    ) {
+        self.method = method
+        self.path = path
+        self.headers = headers
+        self.body = body
+    }
 }

@@ -1,6 +1,6 @@
 //
+//  ZeroHTTP
 //  HttpResponse.swift
-//  zero_proj
 //
 //  Created by Philipp Kotte on 29.06.25.
 //
@@ -9,12 +9,28 @@ import Foundation
 import NIOHTTP1
 import ZeroTemplate
 
+/// Represents an outgoing HTTP response.
+///
+/// This struct encapsulates all necessary components for an HTTP response,
+/// including the status code, headers, and the response body.
 public struct HttpResponse {
+    /// The HTTP status code of the response (e.g., `.ok`, `.notFound`).
     public let status: HTTPResponseStatus
+    
+    /// The HTTP headers to be sent with the response.
     public var headers: HTTPHeaders
+    
+    /// The body of the response as a `String`.
     public let body: String
 
-    // Ein einfacher Initializer für Text-Antworten (setzt standardmäßig text/plain).
+    /// Initializes a new `HttpResponse` for plain text content.
+    ///
+    /// This initializer defaults to a `200 OK` status and sets the
+    /// `Content-Type` header to `text/plain`.
+    ///
+    /// - Parameters:
+    ///   - status: The HTTP status for the response. Defaults to `.ok`.
+    ///   - body: The string content of the response body.
     public init(status: HTTPResponseStatus = .ok, body: String) {
         self.status = status
         self.body = body
@@ -22,7 +38,12 @@ public struct HttpResponse {
         self.headers.add(name: "Content-Type", value: "text/plain; charset=utf-8")
     }
 
-    // Ein Initializer, der das Setzen von Headern erlaubt.
+    /// Initializes a new `HttpResponse` with custom headers.
+    ///
+    /// - Parameters:
+    ///   - status: The HTTP status for the response.
+    ///   - headers: A dictionary of `HTTPHeaders` for the response.
+    ///   - body: The string content of the response body.
     public init(status: HTTPResponseStatus, headers: HTTPHeaders, body: String) {
         self.status = status
         self.headers = headers
@@ -30,36 +51,30 @@ public struct HttpResponse {
     }
 }
 
-// Ein globaler Pfad zum Views-Verzeichnis.
-// Er wird einmal beim Start der App intelligent ermittelt.
 private let viewsDirectoryPath: String = {
-    // #file ist ein spezieller Swift-String, der den Pfad zur aktuellen Datei enthält.
-    // Von hier aus können wir zuverlässig zum `Views`-Ordner navigieren.
-    // Pfad: .../Sources/App/Utility/View.swift
-    // Ziel: .../Sources/App/Views/
     let fileURL = URL(fileURLWithPath: #file)
     let foundationUrl = fileURL.deletingLastPathComponent()
     let appDirURL = foundationUrl.deletingLastPathComponent().appendingPathComponent("Sources").appendingPathComponent("App")
     let viewsDirURL = appDirURL.appendingPathComponent("Views")
-    print("✅ Views-Verzeichnis gefunden unter: \(viewsDirURL.path)")
+    print("✅ Views directory located at: \(viewsDirURL.path)")
     return viewsDirURL.path
 }()
 
-/// Lädt eine HTML-Datei aus dem Resource-Bundle und erstellt eine HTTP-Antwort.
-/// - Parameter filename: Der Name der Datei im `Views`-Ordner (z.B. "index.html").
-/// - Returns: Eine `HTTPResponse` mit dem HTML-Inhalt oder eine 404-Fehler-Antwort.
+/// Creates an `HttpResponse` by reading a static HTML file from the filesystem.
+///
+/// This function is a simple way to serve static HTML pages without any templating.
+/// - Parameter filename: The name of the file within the "Views" directory (e.g., "index.html").
+/// - Returns: An `HttpResponse` containing the HTML content or a 404 error page.
 public func View(_ filename: String) -> HttpResponse {
     let filePath = "\(viewsDirectoryPath)/\(filename)"
 
     do {
-        // Lese den Inhalt der Datei direkt vom Pfad.
         let htmlContent = try String(contentsOfFile: filePath, encoding: .utf8)
         var headers = HTTPHeaders()
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
 
         return HttpResponse(status: .ok, headers: headers, body: htmlContent)
     } catch {
-        // Gib eine hilfreiche Fehlermeldung zurück, wenn die Datei nicht gefunden wurde.
         return HttpResponse(
             status: .notFound,
             headers: [:],
@@ -68,9 +83,6 @@ public func View(_ filename: String) -> HttpResponse {
     }
 }
 
-
-
-// Erstelle eine globale Instanz des Renderers.
 nonisolated(unsafe) private let templateRenderer: TemplateRenderer = {
     let viewsDir = URL(fileURLWithPath: #file)
         .deletingLastPathComponent()
@@ -81,10 +93,17 @@ nonisolated(unsafe) private let templateRenderer: TemplateRenderer = {
     return TemplateRenderer(viewsDirectory: viewsDir)
 }()
 
-// Die `View`-Funktion verwendet jetzt unsere Engine.
+/// Renders a template file with a given context and creates an `HttpResponse`.
+///
+/// This function uses the `TemplateRenderer` to parse a template file,
+/// replace placeholders with data from the context, and return a complete HTML response.
+///
+/// - Parameters:
+///   - filename: The name of the template file (without the `.html.zero` extension).
+///   - context: A dictionary of data to be injected into the template. Defaults to an empty dictionary.
+/// - Returns: An `HttpResponse` containing the rendered HTML or a 500 error page.
 public func render(_ filename: String, context: TemplateContext = [:]) -> HttpResponse {
     do {
-        // Hänge automatisch die richtige Dateiendung an.
         let fullFilename = "\(filename).html.zero"
         let renderedHTML = try templateRenderer.render(filename: fullFilename, context: context)
         
@@ -92,7 +111,7 @@ public func render(_ filename: String, context: TemplateContext = [:]) -> HttpRe
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
         return HttpResponse(status: .ok, headers: headers, body: renderedHTML)
     } catch {
+        let notFound = "<h1>500 Internal Server Error</h1><p>Failed to render template: \(error)</p>"
         return HttpResponse(status: .internalServerError, headers: [:], body: notFound)
     }
 }
-

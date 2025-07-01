@@ -1,10 +1,11 @@
 //
+//  ZeroHTTP
 //  NotFound.swift
-//  zero_proj
 //
 //  Created by Philipp Kotte on 30.06.25.
 //
 
+/// This attribute shows the standart 404 page made by Zero
 public let notFound = """
 <!DOCTYPE html>
 <html lang="de">

@@ -12,7 +12,7 @@ public enum HttpMethod: String {
 
     /// Initializer, um eine NIOHTTP1.HTTPMethod in unsere eigene umzuwandeln.
     /// Das ist die "Brücke" zwischen NIO und unserem Router.
-    init?(_ nioMethod: HTTPMethod) {
+    public init?(_ nioMethod: HTTPMethod) {
         switch nioMethod {
         case .GET: self = .GET
         case .POST: self = .POST

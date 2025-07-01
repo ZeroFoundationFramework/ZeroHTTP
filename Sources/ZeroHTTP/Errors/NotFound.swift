@@ -1,0 +1,147 @@
+//
+//  NotFound.swift
+//  zero_proj
+//
+//  Created by Philipp Kotte on 30.06.25.
+//
+
+public let notFound = """
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Seite nicht gefunden</title>
+    <!-- Google Font für einen futuristischen Look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <style>
+        /* Grundlegende Styles und Resets */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background-color: #020617; /* Dunkles Marineblau */
+            color: #f0f8ff; /* AliceBlue als Kontrast */
+            overflow: hidden;
+            user-select: none;
+        }
+
+        /* Haupt-Container, der den Inhalt zentriert */
+        .main-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        /* Styling für den großen 404-Text mit Glitch-Effekt */
+        .glitch-text {
+            position: relative;
+            font-size: 8rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: 0.1em;
+            animation: glitch-skew 1s infinite linear alternate-reverse;
+        }
+
+        /* Pseudo-Elemente für die Glitch-Ebenen */
+        .glitch-text::before,
+        .glitch-text::after {
+            content: attr(data-text); /* Nimmt den Text aus dem data-Attribut */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #020617;
+            overflow: hidden;
+        }
+
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1; /* Magenta */
+            animation: glitch-anim-1 2s infinite linear alternate-reverse;
+        }
+
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9; /* Cyan */
+            animation: glitch-anim-2 2s infinite linear alternate-reverse;
+        }
+
+        /* Keyframe-Animationen für den Glitch-Effekt */
+        @keyframes glitch-anim-1 {
+            0% { clip-path: inset(15% 0 86% 0); } 25% { clip-path: inset(57% 0 13% 0); } 50% { clip-path: inset(33% 0 54% 0); } 75% { clip-path: inset(8% 0 77% 0); } 100% { clip-path: inset(69% 0 4% 0); }
+        }
+
+        @keyframes glitch-anim-2 {
+            0% { clip-path: inset(79% 0 18% 0); } 25% { clip-path: inset(2% 0 48% 0); } 50% { clip-path: inset(48% 0 41% 0); } 75% { clip-path: inset(89% 0 8% 0); } 100% { clip-path: inset(41% 0 53% 0); }
+        }
+
+        @keyframes glitch-skew {
+            0% { transform: skewX(0); } 5% { transform: skewX(0.5deg); } 10% { transform: skewX(-0.5deg); } 20% { transform: skewX(0); } 100% { transform: skewX(0); }
+        }
+        
+        /* Untertitel-Styling */
+        .subtitle {
+            font-size: 1.25rem;
+            color: #a5f3fc;
+            margin-top: 1rem;
+            letter-spacing: 0.1em;
+        }
+        
+        /* Link zum Zurückkehren */
+        .back-link {
+            margin-top: 2.5rem;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #00fff9;
+            color: #00fff9;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: #00fff9;
+            color: #020617;
+            box-shadow: 0 0 20px #00fff9;
+        }
+        
+        @media (min-width: 768px) {
+             .glitch-text {
+                font-size: 12rem;
+            }
+            .subtitle {
+                font-size: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <main class="main-container">
+        <!-- Der data-text wird von den Pseudo-Elementen für den Glitch-Effekt verwendet -->
+        <h1 class="glitch-text" data-text="404">404</h1>
+        <p class="subtitle">
+            Seite nicht gefunden
+        </p>
+        <a href="/" class="back-link">
+            Zurück zur Startseite
+        </a>
+    </main>
+
+</body>
+</html>
+""";

@@ -1,5 +1,5 @@
 {
-  "originHash" : "98ab0ab591ac43a398f2d4b8048337b5eaf32e0b7bd34743d4a6a551e7fe4a0f",
+  "originHash" : "cef8d494616176646dccb765fa00e547081d97d32b3d97822801494d059b00b2",
   "pins" : [
     {
       "identity" : "swift-atomics",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroTemplate.git",
       "state" : {
-        "revision" : "4d61547bf1f31999c92ae1ac11ae1013b952b28d",
-        "version" : "1.0.1"
+        "revision" : "c3d8796f6d7f487baac809c8352da1dc95f93446",
+        "version" : "1.0.2"
       }
     }
   ],

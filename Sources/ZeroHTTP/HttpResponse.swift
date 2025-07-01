@@ -10,9 +10,9 @@ import NIOHTTP1
 import ZeroTemplate // <--- Wichtig!
 
 public struct HttpResponse {
-    let status: HTTPResponseStatus
-    var headers: HTTPHeaders
-    let body: String
+    public let status: HTTPResponseStatus
+    public var headers: HTTPHeaders
+    public let body: String
 
     // Ein einfacher Initializer für Text-Antworten (setzt standardmäßig text/plain).
     public init(status: HTTPResponseStatus = .ok, body: String) {

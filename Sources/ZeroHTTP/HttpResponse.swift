@@ -15,7 +15,7 @@ public struct HttpResponse {
     let body: String
 
     // Ein einfacher Initializer für Text-Antworten (setzt standardmäßig text/plain).
-    init(status: HTTPResponseStatus = .ok, body: String) {
+    public init(status: HTTPResponseStatus = .ok, body: String) {
         self.status = status
         self.body = body
         self.headers = HTTPHeaders()
@@ -23,7 +23,7 @@ public struct HttpResponse {
     }
 
     // Ein Initializer, der das Setzen von Headern erlaubt.
-    init(status: HTTPResponseStatus, headers: HTTPHeaders, body: String) {
+    public init(status: HTTPResponseStatus, headers: HTTPHeaders, body: String) {
         self.status = status
         self.headers = headers
         self.body = body

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import NIOHTTP1
 
 /// A structure that represents a collection of HTTP headers.
 ///
@@ -89,6 +90,15 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
             }
         }
     }
+    
+    func toNIOHeaders() -> NIOHTTP1.HTTPHeaders {
+        var nioHeaders = NIOHTTP1.HTTPHeaders()
+        // Annahme: Deine interne Speicherung heißt `storage`
+        for (key, value) in storage {
+            nioHeaders.add(name: key, value: value)
+        }
+        return nioHeaders
+    }
 }
 
 extension UInt8 {
@@ -96,3 +106,4 @@ extension UInt8 {
         self <= 127
     }
 }
+

@@ -91,7 +91,7 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
         }
     }
     
-    func toNIOHeaders() -> NIOHTTP1.HTTPHeaders {
+    public func toNIOHeaders() -> NIOHTTP1.HTTPHeaders {
         var nioHeaders = NIOHTTP1.HTTPHeaders()
         // Annahme: Deine interne Speicherung heißt `storage`
         for (key, value) in storage {

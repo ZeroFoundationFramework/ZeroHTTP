@@ -21,7 +21,7 @@ public struct HttpResponse {
     public var headers: HttpHeaders
     
     /// The body of the response as a `String`.
-    public let body: String
+    public let body: Data
 
     /// Initializes a new `HttpResponse` for plain text content.
     ///
@@ -31,11 +31,27 @@ public struct HttpResponse {
     /// - Parameters:
     ///   - status: The HTTP status for the response. Defaults to `.ok`.
     ///   - body: The string content of the response body.
-    public init(status: HTTPResponseStatus = .ok, body: String) {
+    @available(*, deprecated, message: "Use the Data initializer instead.")
+    public init(status: HTTPResponseStatus = .ok, body: String = "") {
+        self.status = status
+        self.body = body.data(using: .utf8)!
+        self.headers = HttpHeaders()
+        self.headers.add(name: "Content-Type", value: "text/plain; charset=utf-8")
+    }
+    
+    /// Initializes a new `HttpResponse` for plain text content.
+    ///
+    /// This initializer defaults to a `200 OK` status and sets the
+    /// `Content-Type` header to `text/plain`.
+    ///
+    /// - Parameters:
+    ///   - status: The HTTP status for the response. Defaults to `.ok`.
+    ///   - body: The string content of the response body.
+    public init(status: HTTPResponseStatus = .ok, body: Data){
         self.status = status
         self.body = body
         self.headers = HttpHeaders()
-        self.headers.add(name: "Content-Type", value: "text/plain; charset=utf-8")
+        
     }
 
     /// Initializes a new `HttpResponse` with custom headers.
@@ -44,7 +60,20 @@ public struct HttpResponse {
     ///   - status: The HTTP status for the response.
     ///   - headers: A dictionary of `HTTPHeaders` for the response.
     ///   - body: The string content of the response body.
-    public init(status: HTTPResponseStatus, headers: HttpHeaders, body: String) {
+    @available(*, deprecated, message: "Use the Initializer that takes data instead of String for the Body.")
+    public init(status: HTTPResponseStatus, headers: HttpHeaders, body: String = "") {
+        self.status = status
+        self.headers = headers
+        self.body = body.data(using: .utf8)!
+    }
+    
+    /// Initializes a new `HttpResponse` with custom headers.
+    ///
+    /// - Parameters:
+    ///   - status: The HTTP status for the response.
+    ///   - headers: A dictionary of `HTTPHeaders` for the response.
+    ///   - body: The string content of the response body.
+    public init(status: HTTPResponseStatus, headers: HttpHeaders, body: Data) {
         self.status = status
         self.headers = headers
         self.body = body
@@ -69,16 +98,17 @@ public func View(_ filename: String) -> HttpResponse {
     let filePath = "\(viewsDirectoryPath)/\(filename)"
 
     do {
-        let htmlContent = try String(contentsOfFile: filePath, encoding: .utf8)
+        let htmlContent = try String(contentsOfFile: filePath, encoding: .utf8).data(using: .utf8)
         var headers = HttpHeaders()
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
 
-        return HttpResponse(status: .ok, headers: headers, body: htmlContent)
+        return HttpResponse(status: .ok, headers: headers, body: htmlContent ?? Data())
     } catch {
         return HttpResponse(
             status: .notFound,
             headers: [:],
             body: "<h1>404 Not Found</h1><p>View file '\(filename)' not found at expected path: \(filePath)</p>"
+                .data(using: .utf8)!
         )
     }
 }
@@ -106,12 +136,17 @@ public func render(_ filename: String, context: TemplateContext = [:]) -> HttpRe
     do {
         let fullFilename = "\(filename).html.zero"
         let renderedHTML = try templateRenderer.render(filename: fullFilename, context: context)
+        let renderedHtmlData = renderedHTML.data(using: .utf8)
         
         var headers = HttpHeaders()
         headers.add(name: "Content-Type", value: "text/html; charset=utf-8")
-        return HttpResponse(status: .ok, headers: headers, body: renderedHTML)
+        return HttpResponse(status: .ok, headers: headers, body: renderedHtmlData ?? Data())
     } catch {
         let notFound = "<h1>500 Internal Server Error</h1><p>Failed to render template: \(error)</p>"
-        return HttpResponse(status: .internalServerError, headers: [:], body: notFound)
+        return HttpResponse(
+            status: .internalServerError,
+            headers: [:],
+            body: notFound.data(using: .utf8)!
+        )
     }
 }

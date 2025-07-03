@@ -63,9 +63,11 @@ final class ConnectionHandler: @unchecked Sendable{
             headers["Content-Length"] = "0"
         }
         
-        for (key, value) in headers.storage { //Annahme storage ist [String: String]
+        headers.forEach { (key, value) in
             responseString += "\(key): \(value)\r\n"
         }
+            
+        
         responseString += "\r\n"
         
         var responseData = responseString.data(using: .utf8)

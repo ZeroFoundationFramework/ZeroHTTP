@@ -13,11 +13,27 @@ import Foundation
 /// normalizing all keys to lowercase for storage and retrieval. It also enforces
 /// that both header names and values consist of ASCII characters.
 public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
-    
-    
+    public static func == (lhs: HttpHeaders, rhs: HttpHeaders) -> Bool {
+        // Check if all lhs entries are in rhs
+        for (key, value) in lhs.storage {
+            if rhs.storage[key]?.value != value.value {
+                return false
+            }
+        }
+        // Check if all rhs entries are in lhs (to ensure no extra entries)
+        for (key, value) in rhs.storage {
+            if lhs.storage[key]?.value != value.value {
+                return false
+            }
+        }
+        return true
+    }
 
-    /// Internal storage for the headers. Keys are always stored in lowercase.
-    public var storage: [String: String] = [:]
+    
+    /// Internal storage for the headers. The dictionary key is the lowercase
+    /// version of the header name for case-insensitive access. The value is a
+    /// tuple containing the original key and its value.
+    private var storage: [String: (originalKey: String, value: String)] = [:]
 
     /// Initializes an empty `HttpHeaders` collection.
     public init() {}
@@ -46,12 +62,10 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
     ///   - name: The name of the header (e.g., "Content-Type"). Must be ASCII.
     ///   - value: The value of the header. Must be ASCII.
     public mutating func add(name: String, value: String) {
-        // HIER IST DIE ÄNDERUNG:
-        // Erzwinge, dass Header-Namen und -Werte ASCII-konform sind.
-        precondition(!name.utf8.contains(where: { !$0.isASCII }), "HTTP header name must contain only ASCII characters.")
-        precondition(!value.utf8.contains(where: { !$0.isASCII }), "HTTP header value must contain only ASCII characters.")
+        precondition(name.utf8.allSatisfy(\.isASCII), "HTTP header name must contain only ASCII characters.")
+        precondition(value.utf8.allSatisfy(\.isASCII), "HTTP header value must contain only ASCII characters.")
         
-        storage[name.lowercased()] = value
+        storage[name.lowercased()] = (originalKey: name, value: value)
     }
 
     /// Removes a header by its name.
@@ -79,7 +93,7 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
     /// ```
     public subscript(name: String) -> String? {
         get {
-            return storage[name.lowercased()]
+            return storage[name.lowercased()]?.value
         }
         set {
             if let value = newValue {
@@ -89,9 +103,16 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
             }
         }
     }
+    
+    /// Executes a closure for each header in the collection.
+    /// - Parameter body: A closure that takes the original header name and its value as arguments.
+    public func forEach(_ body: (String, String) -> Void) {
+        storage.values.forEach { body($0.originalKey, $0.value) }
+    }
 }
 
 extension UInt8 {
+    /// A helper property to check if a byte represents an ASCII character.
     fileprivate var isASCII: Bool {
         self <= 127
     }

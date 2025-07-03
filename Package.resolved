@@ -1,13 +1,13 @@
 {
-  "originHash" : "d20a9f9d7ef538a52fea50c81889499a92474ced84ee21960739a4b20bc4929e",
+  "originHash" : "01df76b46e9d6b41e93839aaa4ecf9afb0ec6240df6b6a0ffe8be574fa5b0792",
   "pins" : [
     {
       "identity" : "zeroerrors",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroErrors.git",
       "state" : {
-        "revision" : "9d907df8c4178d098ab117667affa1dece1287c9",
-        "version" : "1.0.2"
+        "revision" : "46fdd4e87853ef896fdef7bae94414b71cc477f0",
+        "version" : "1.0.3"
       }
     },
     {
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroTemplate.git",
       "state" : {
-        "revision" : "f19990aa95feb9b2a9a912395495cd43a2762014",
-        "version" : "1.0.3"
+        "revision" : "83060d4c548c0de96b7a3f2a340ff8c056747608",
+        "version" : "1.0.4"
       }
     }
   ],

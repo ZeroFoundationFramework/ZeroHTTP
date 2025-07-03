@@ -72,7 +72,7 @@ final class ConnectionHandler: @unchecked Sendable {
     }
 
     private func send(response: HttpResponse) {
-        var responseString = "HTTP/1.1 \(response.status) \(response.statusPhrase)\r\n"
+        var responseString = "HTTP/1.1 \(response.status.rawValue) \(response.statusPhrase)\r\n"
         var headers = response.headers
         
         if let body = response.body {

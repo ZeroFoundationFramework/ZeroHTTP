@@ -13,35 +13,39 @@ public class HTTPParser {
     
     public func parse(data: Data) -> HttpRequest? {
         
-        guard let requestString = String(data: data, encoding: .utf8) else {
+        let endOfHeadersRange = data.range(of: "\r\n\r\n".data(using: .utf8)!)
+        
+        // Wenn keine Trennung gefunden wird, ist die Anfrage unvollständig.
+        guard let endOfHeadersRange = endOfHeadersRange else {
             return nil
         }
         
-        let lines = requestString.components(separatedBy: "\r\n")
+        let headerData = data[..<endOfHeadersRange.lowerBound]
+        let bodyData = data[endOfHeadersRange.upperBound...]
+        
+        guard let headerString = String(data: headerData, encoding: .utf8) else {
+            return nil
+        }
+        
+        let lines = headerString.components(separatedBy: "\r\n")
         guard !lines.isEmpty else { return nil }
-
+        
         // Parse Request Line
         let requestLine = lines[0].components(separatedBy: " ")
-        guard requestLine.count == 3 else { return nil }
-            
+        guard requestLine.count >= 2 else { return nil } // HTTP Version ist optional für uns
+        
         let method = HttpMethod(rawValue: requestLine[0]) ?? .UNKNOWN
         let path = requestLine[1]
-                
+        
         // Parse Headers
         var headers = HttpHeaders()
-        var lineIndex = 1
-        while lineIndex < lines.count && !lines[lineIndex].isEmpty {
-            let headerLine = lines[lineIndex].components(separatedBy: ": ")
-            if headerLine.count == 2 {
-                headers[headerLine[0]] = headerLine[1]
+        for line in lines.dropFirst() {
+            let headerParts = line.split(separator: ":", maxSplits: 1).map(String.init)
+            if headerParts.count == 2 {
+                headers[headerParts[0]] = headerParts[1].trimmingCharacters(in: .whitespaces)
             }
-            lineIndex += 1
         }
-                
-        // Parse Body (vereinfacht)
-        let bodyString = lines.dropFirst(lineIndex + 1).joined()
-        let body = bodyString.data(using: .utf8)
-
-        return HttpRequest(method: method, path: path, headers: headers, body: body)
+        
+        return HttpRequest(method: method, path: path, headers: headers, body: bodyData.isEmpty ? nil : bodyData)
     }
 }

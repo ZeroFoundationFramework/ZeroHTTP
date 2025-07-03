@@ -17,6 +17,7 @@ final class ConnectionHandler: @unchecked Sendable{
         self.connection = connection
         self.router = router
         print("✅ Neue Verbindung angenommen: \(connection.endpoint)")
+        print("Complete Connection: \(connection)")
     }
     
     func start(){

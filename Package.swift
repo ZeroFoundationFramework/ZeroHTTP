@@ -5,6 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "ZeroHTTP",
+    platforms: [.macOS(.v12)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -13,7 +14,6 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-nio.git", from: "2.0.0"),
         .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.2")
     ],
     targets: [
@@ -22,11 +22,9 @@ let package = Package(
         .target(
             name: "ZeroHTTP",
             dependencies: [
-                .product(name: "NIO", package: "swift-nio"),
-                .product(name: "NIOHTTP1", package: "swift-nio"),
                 .product(name: "ZeroTemplate", package: "ZeroTemplate")
             ],
-        ),
+        )
 
     ]
 )

@@ -19,7 +19,7 @@ public struct HttpRequest {
     public let path: String
     
     /// A dictionary containing the HTTP headers of the request.
-    public let headers: [String: String]
+    public let headers: HttpHeaders
     
     /// The optional body of the request, typically for POST or PUT requests.
     public let body: Data?
@@ -34,7 +34,7 @@ public struct HttpRequest {
     public init(
         method: HttpMethod,
         path: String,
-        headers: [String: String] = [:],
+        headers: HttpHeaders = [:],
         body: Data? = nil
     ) {
         self.method = method

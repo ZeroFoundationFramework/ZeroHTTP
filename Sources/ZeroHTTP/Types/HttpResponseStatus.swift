@@ -5,7 +5,7 @@
 //  Created by Philipp Kotte on 01.07.25.
 //
 
-enum HttpResponseStatus: UInt, Sendable {
+public enum HttpResponseStatus: UInt, Sendable {
     
     // 1xx
     case `continue` = 100

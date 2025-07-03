@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import NIOHTTP1
 
 /// A structure that represents a collection of HTTP headers.
 ///
@@ -18,7 +17,7 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
     
 
     /// Internal storage for the headers. Keys are always stored in lowercase.
-    private var storage: [String: String] = [:]
+    public var storage: [String: String] = [:]
 
     /// Initializes an empty `HttpHeaders` collection.
     public init() {}
@@ -89,15 +88,6 @@ public struct HttpHeaders: ExpressibleByDictionaryLiteral, Equatable {
                 remove(name: name)
             }
         }
-    }
-    
-    public func toNIOHeaders() -> NIOHTTP1.HTTPHeaders {
-        var nioHeaders = NIOHTTP1.HTTPHeaders()
-        // Annahme: Deine interne Speicherung heißt `storage`
-        for (key, value) in storage {
-            nioHeaders.add(name: key, value: value)
-        }
-        return nioHeaders
     }
 }
 

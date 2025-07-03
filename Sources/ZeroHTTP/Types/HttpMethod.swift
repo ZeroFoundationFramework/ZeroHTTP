@@ -5,7 +5,6 @@
 //  Created by Philipp Kotte on 26.06.25.
 //
 
-import NIOHTTP1
 import Foundation
 
 /// Represents the most common HTTP methods.
@@ -30,23 +29,6 @@ public enum HttpMethod: String {
     
     /// The PATCH method is used to apply partial modifications to a resource.
     case PATCH
-
-    /// Initializes an `HttpMethod` instance from an `NIOHTTP1.HTTPMethod`.
-    ///
-    /// This failable initializer acts as a bridge between the low-level NIO layer
-    /// and the framework's abstraction layer.
-    ///
-    /// - Parameters:
-    ///   - nioMethod: The `NIOHTTP1.HTTPMethod` instance to be converted.
-    /// - Returns: A corresponding `HttpMethod` instance, or `nil` if the method is not supported.
-    public init?(_ nioMethod: NIOHTTP1.HTTPMethod) {
-        switch nioMethod {
-        case .GET: self = .GET
-        case .POST: self = .POST
-        case .PUT: self = .PUT
-        case .DELETE: self = .DELETE
-        case .PATCH: self = .PATCH
-        default: return nil
-        }
-    }
+    
+    case UNKNOWN
 }

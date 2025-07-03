@@ -70,6 +70,8 @@ final class ConnectionHandler: @unchecked Sendable{
         
         responseString += "\r\n"
         
+        print("ResponseString: \(responseString)")
+        
         var responseData = responseString.data(using: .utf8)
         
         if let body = response.body {

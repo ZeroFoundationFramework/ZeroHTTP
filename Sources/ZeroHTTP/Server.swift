@@ -13,7 +13,7 @@ public final class Server: @unchecked Sendable{
     private let router: @Sendable (HttpRequest) -> HttpResponse
     private var middleware: [Middleware]
     
-    public init(port: UInt16, router: @escaping @Sendable (HttpRequest) -> HttpResponse, middlewares: [Middleware] = []) throws {
+    public init(port: UInt16, middlewares: [Middleware] = [], router: @escaping @Sendable (HttpRequest) -> HttpResponse) throws {
         self.router = router
         let parameters = NWParameters.tcp
         self.listener = try NWListener(using: parameters, on: .init(integerLiteral: port))

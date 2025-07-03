@@ -8,7 +8,7 @@
 import Foundation
 
 /// A thread-safe router that manages and dispatches requests to registered routes.
-public final class Router {
+public final class Router: @unchecked Sendable {
     /// The shared singleton instance, allowing global access to the router.
     @MainActor public static let shared = Router()
     

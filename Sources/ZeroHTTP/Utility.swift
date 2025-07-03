@@ -22,6 +22,7 @@ private let viewsDirectoryPath: String = {
 nonisolated(unsafe) private let templateRenderer: TemplateRenderer = {
     let viewsDir = URL(fileURLWithPath: #file)
         .deletingLastPathComponent()
+        .deletingLastPathComponent()
         .appendingPathComponent("Sources")
         .appendingPathComponent("App")
         .appendingPathComponent("Views")

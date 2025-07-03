@@ -1,13 +1,22 @@
 {
-  "originHash" : "b80d1426d1e49378f10de914f1363e77e9a40923c2aadd22903459e9c4919dc2",
+  "originHash" : "d20a9f9d7ef538a52fea50c81889499a92474ced84ee21960739a4b20bc4929e",
   "pins" : [
+    {
+      "identity" : "zeroerrors",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ZeroFoundationFramework/ZeroErrors.git",
+      "state" : {
+        "revision" : "9d907df8c4178d098ab117667affa1dece1287c9",
+        "version" : "1.0.2"
+      }
+    },
     {
       "identity" : "zerotemplate",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroTemplate.git",
       "state" : {
-        "revision" : "c3d8796f6d7f487baac809c8352da1dc95f93446",
-        "version" : "1.0.2"
+        "revision" : "f19990aa95feb9b2a9a912395495cd43a2762014",
+        "version" : "1.0.3"
       }
     }
   ],

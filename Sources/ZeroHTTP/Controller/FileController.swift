@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ZeroErrors
 
 final class FileController: NSObject, DiscoverableController, Controller {
     // Ein Dictionary, um Dateiendungen auf MIME-Typen abzubilden.
@@ -40,12 +41,13 @@ final class FileController: NSObject, DiscoverableController, Controller {
 
             // Sicherheitscheck: Verhindere, dass auf Dateien außerhalb des Public-Ordners zugegriffen wird.
             guard fileURL.path.hasPrefix(viewsDir.path) else {
-                return HttpResponse(status: .forbidden, headers: [:], body: "Access denied.".data(using: .utf8)!)
+                
+                return HttpResponse(status: .forbidden, headers: [:], body: ZeroErrors.resourceNotFound.data(using: .utf8)!)
             }
 
             // Lese die Datei.
             guard let fileData = try? Data(contentsOf: fileURL) else {
-                return HttpResponse(status: .notFound, headers: [:], body: "File not found.".data(using: .utf8)!)
+                return HttpResponse(status: .notFound, headers: [:], body: ZeroErrors.internalServerError.data(using: .utf8)!)
             }
             
             // Bestimme den Content-Type und print ihn.
@@ -56,9 +58,6 @@ final class FileController: NSObject, DiscoverableController, Controller {
             headers.add(name: "Content-Type", value: contentType)
             
             print("Content-Type used for \(fileURL) : \(contentType)")
-            
-            // Wandle die Daten in einen String um (für die HttpResponse-Struktur).
-            // HINWEIS: Für eine performantere Lösung müsste HttpResponse direkt mit `Data` arbeiten.
             
             return HttpResponse(status: .ok, headers: headers, body: fileData)
              

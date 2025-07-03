@@ -14,7 +14,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.2")
+        .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.3"),
+        .package(url: "https://github.com/ZeroFoundationFramework/ZeroErrors.git", from: "1.0.2")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -22,7 +23,8 @@ let package = Package(
         .target(
             name: "ZeroHTTP",
             dependencies: [
-                .product(name: "ZeroTemplate", package: "ZeroTemplate")
+                .product(name: "ZeroTemplate", package: "ZeroTemplate"),
+                .product(name: "ZeroErrors", package: "ZeroErrors")
             ],
         )
 

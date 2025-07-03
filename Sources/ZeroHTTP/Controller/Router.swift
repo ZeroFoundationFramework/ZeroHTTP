@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import ZeroErrors
 
 /// A thread-safe router that manages and dispatches requests to registered routes.
 public final class Router: @unchecked Sendable {
@@ -63,7 +64,7 @@ public final class Router: @unchecked Sendable {
         }
         
         // If no route was matched, return a standard 404 response.
-        let body = "<h1>404 Not Found</h1><p>The requested resource at \(request.path) could not be found.</p>"
+        let body = resourceNotFound
         var headers = HttpHeaders()
         headers["Content-Type"] = "text/html; charset=utf-8"
         

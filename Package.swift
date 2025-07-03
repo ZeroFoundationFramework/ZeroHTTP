@@ -14,7 +14,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.4"),
+        .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.5"),
         .package(url: "https://github.com/ZeroFoundationFramework/ZeroErrors.git", from: "1.0.2")
     ],
     targets: [

@@ -30,7 +30,16 @@ public final class Server: @unchecked Sendable{
     
     public func start() throws {
         listener.stateUpdateHandler = { state in
-            // Server status änderungen behandeln
+            switch state {
+            case .ready:
+                if let port = self.listener.port {
+                    print("✅ Server lauscht auf Port \(port)")
+                }
+            case .failed(let error):
+                print("❌ Serverstart fehlgeschlagen: \(error.localizedDescription)")
+            default:
+                break
+            }
         }
         
         listener.newConnectionHandler = { [weak self] newConnection in

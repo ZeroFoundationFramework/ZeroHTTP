@@ -12,11 +12,13 @@ final class ConnectionHandler: @unchecked Sendable {
     private let connection: NWConnection
     private let parser = HTTPParser()
     private let router: @Sendable (HttpRequest) -> HttpResponse
+    private let middlewares: [Middleware]
     private var receivedData = Data()
 
-    init(connection: NWConnection, router: @escaping @Sendable (HttpRequest) -> HttpResponse) {
+    init(connection: NWConnection, middlewares: [Middleware] = [], router: @escaping @Sendable (HttpRequest) -> HttpResponse) {
         self.connection = connection
         self.router = router
+        self.middlewares = middlewares
     }
 
     func start() {
@@ -57,17 +59,19 @@ final class ConnectionHandler: @unchecked Sendable {
     }
     
     private func processBufferedData() {
-        // Versuche, eine vollständige Anfrage aus den gepufferten Daten zu parsen.
-        guard let request = self.parser.parse(data: self.receivedData) else {
-            // Die Anfrage ist noch nicht vollständig, warte auf mehr Daten.
-            return
-        }
-        
-        // Wenn wir eine Anfrage parsen konnten, leere den Puffer.
+        guard let request = self.parser.parse(data: self.receivedData) else { return }
         self.receivedData.removeAll()
+            
+    
+        let routerResponder: Responder = { req in
+            return self.router(req)
+        }
+            
         
-        // Verarbeite die Anfrage und sende die Antwort.
-        let response = self.router(request)
+        let chain = MiddlewareChain(middlewares: self.middlewares, responder: routerResponder)
+            
+        let response = chain.run(request: request)
+            
         self.send(response: response)
     }
 

@@ -8,34 +8,14 @@ import Foundation
 import ZeroTemplate
 import ZeroErrors
 
-/// Der Pfad zum "Views"-Verzeichnis, wird einmal beim Start ermittelt.
-private let viewsDirectoryPath: String = {
-    let fileURL = URL(fileURLWithPath: #file)
-    let utilityDirURL = fileURL.deletingLastPathComponent()
-    let appDirURL = utilityDirURL.deletingLastPathComponent()
-    let viewsDirURL = appDirURL.appendingPathComponent("Views")
-    print("✅ Views-Verzeichnis gefunden unter: \(viewsDirURL.path)")
-    return viewsDirURL.path
-}()
-
 /// Eine globale Instanz des Template-Renderers.
 nonisolated(unsafe) private let templateRenderer: TemplateRenderer = {
-    let viewsDir = URL(fileURLWithPath: #file)
-        .deletingLastPathComponent()
-        .deletingLastPathComponent()
-        .appendingPathComponent("Sources")
-        .appendingPathComponent("App")
-        .appendingPathComponent("Views")
-    return TemplateRenderer(viewsDirectory: viewsDir)
+    return TemplateRenderer()
 }()
-
-// --- Öffentliche Hilfsfunktionen ---
-
 /// Erstellt eine `HttpResponse` durch das Lesen einer statischen HTML-Datei.
-public func View(_ filename: String) -> HttpResponse {
-    let filePath = "\(viewsDirectoryPath)/\(filename)"
+public func View(_ filename: URL) -> HttpResponse {
     do {
-        let htmlContent = try String(contentsOfFile: filePath, encoding: .utf8)
+        let htmlContent = try String(contentsOf: filename)
         var headers = HttpHeaders()
         headers["Content-Type"] = "text/html; charset=utf-8"
         return response(status: .ok, statusPhrase: "OK", headers: headers, body: htmlContent)
@@ -45,10 +25,9 @@ public func View(_ filename: String) -> HttpResponse {
 }
 
 /// Rendert eine Template-Datei mit einem Kontext und erstellt eine `HttpResponse`.
-public func rendered(_ filename: String, context: TemplateContext = [:]) -> HttpResponse {
+public func rendered(_ filename: URL, context: TemplateContext = [:]) -> HttpResponse {
     do {
-        let fullFilename = "\(filename).zero.html"
-        let renderedHTML = try templateRenderer.render(filename: fullFilename, context: context)
+        let renderedHTML = try templateRenderer.render(filename: filename, context: context)
         
         var headers = HttpHeaders()
         headers["Content-Type"] = "text/html; charset=utf-8"

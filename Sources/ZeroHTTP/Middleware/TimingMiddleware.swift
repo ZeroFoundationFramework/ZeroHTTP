@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import ZeroLogger
 
 public struct TimingMiddleware: Middleware, Sendable {
+    
+    private var logger = Logger(label: "zero.http.middleware.timig")
     
     public init() {}
     
@@ -33,7 +36,7 @@ public struct TimingMiddleware: Middleware, Sendable {
         response.headers.add(name: "X-Response-Time", value: duration)
         
         // 6. Gib die Dauer in der Konsole aus.
-        print("⏱️ Request an '\(request.path)' verarbeitet in \(duration)")
+        logger.dev("⏱️ Request an '\(request.path)' verarbeitet in \(duration)")
 
         // 7. Gib die (modifizierte) Antwort zurück.
         return response

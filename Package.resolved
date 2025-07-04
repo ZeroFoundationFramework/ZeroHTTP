@@ -1,5 +1,5 @@
 {
-  "originHash" : "6184dd9194d96d1d9aeab08ea0b40f6572083ef1e70582e64d36849a4a497206",
+  "originHash" : "28197048e811244ab2b9714b22d022504edccd1419ede452e6459c2b6de49991",
   "pins" : [
     {
       "identity" : "zeroerrors",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "46fdd4e87853ef896fdef7bae94414b71cc477f0",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "zerologger",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ZeroFoundationFramework/ZeroLogger.git",
+      "state" : {
+        "revision" : "1d799c88e4cf5dbedaea7f03687f8740491fea3f",
+        "version" : "1.0.1"
       }
     },
     {

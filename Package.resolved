@@ -1,5 +1,5 @@
 {
-  "originHash" : "1152f78898b78a1c23a42817a069eba9bd8ad2869676725717951de8a7530e5b",
+  "originHash" : "6184dd9194d96d1d9aeab08ea0b40f6572083ef1e70582e64d36849a4a497206",
   "pins" : [
     {
       "identity" : "zeroerrors",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroTemplate.git",
       "state" : {
-        "revision" : "062684dcded54f47e6dcfdc0c06c5d61d9468845",
-        "version" : "1.0.6"
+        "revision" : "b806eab902ba4acd3cf15978990e4acc7d68256b",
+        "version" : "1.0.7"
       }
     }
   ],

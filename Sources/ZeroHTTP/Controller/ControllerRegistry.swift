@@ -6,10 +6,12 @@
 //
 
 import Foundation
+import ZeroLogger
 
 public class ControllerRegistry {
     /// Gibt eine Liste von Instanzen zurück, die dem `Controller`-Protokoll entsprechen.
     public static func discoverControllers() -> [Controller] {
+        let logger = Logger(label: "zero.http.controller.registry")
         var controllers: [Controller] = []
         let classCount = objc_getClassList(nil, 0)
         let classes = UnsafeMutablePointer<AnyClass?>.allocate(capacity: Int(classCount))
@@ -25,13 +27,9 @@ public class ControllerRegistry {
                 if let discoverableInstance = (cls as? DiscoverableController.Type)?.init() {
                     // 3. Prüfe, ob diese Instanz auch dem reinen Swift-Protokoll `Controller` entspricht.
                     if let controllerInstance = discoverableInstance as? Controller {
-                        print("✅ \(type(of: controllerInstance))")
-                                                
                             for route in controllerInstance.body {
-                                print(
-                                    "   -> Route: \(route.method.rawValue.padding(toLength: 5, withPad: " ", startingAt: 0)) \(route.path)")
+                                logger.info("\(type(of: controllerInstance)) -> Route: \(route.method.rawValue.padding(toLength: 5, withPad: " ", startingAt: 0)) \(route.path) ")
                             }
-                        
                         controllers.append(controllerInstance)
                         
                     }

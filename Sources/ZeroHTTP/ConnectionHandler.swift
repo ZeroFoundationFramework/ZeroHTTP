@@ -7,6 +7,7 @@
 
 import Foundation
 import Network
+import ZeroLogger
 
 final class ConnectionHandler: @unchecked Sendable {
     private let connection: NWConnection
@@ -14,6 +15,7 @@ final class ConnectionHandler: @unchecked Sendable {
     private let router: @Sendable (HttpRequest) -> HttpResponse
     private let middlewares: [Middleware]
     private var receivedData = Data()
+    private var logger = Logger(label: "zero.http.server.connection")
 
     init(connection: NWConnection, middlewares: [Middleware] = [], router: @escaping @Sendable (HttpRequest) -> HttpResponse) {
         self.connection = connection
@@ -30,10 +32,10 @@ final class ConnectionHandler: @unchecked Sendable {
     private func handleStateChange(to state: NWConnection.State) {
         switch state {
         case .failed(let error):
-            print("❌ Verbindung fehlgeschlagen: \(error.localizedDescription)")
+            logger.error("❌ Verbindung fehlgeschlagen: \(error.localizedDescription)")
             self.connection.cancel()
         case .cancelled:
-            // Verbindung wurde sauber beendet.
+            logger.info("Verbundung wurde beendet.")
             break
         default:
             break
@@ -86,15 +88,16 @@ final class ConnectionHandler: @unchecked Sendable {
         }
         
         headers["Connection"] = "close" // Wir schließen die Verbindung nach jeder Antwort
+    
         
-        print("headers: \(headers)")
+        logger.dev("headers \(headers)")
 
         headers.forEach { (key, value) in
             responseString += "\(key): \(value)\r\n"
         }
         responseString += "\r\n"
         
-        print("ResponseString from Headers: \(responseString)")
+        logger.dev("ResponseString from Headers. \(responseString)")
 
         var responseData = responseString.data(using: .utf8)!
         if let body = response.body {

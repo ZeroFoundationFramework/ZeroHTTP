@@ -7,11 +7,13 @@
 
 import Foundation
 import Network
+import ZeroLogger
 
 public final class Server: @unchecked Sendable{
     private let listener: NWListener
     private let router: @Sendable (HttpRequest) -> HttpResponse
     private var middleware: [Middleware]
+    private var logger = Logger(label: "zero.http.server")
     
     public init(port: UInt16, middlewares: [Middleware] = [], router: @escaping @Sendable (HttpRequest) -> HttpResponse) throws {
         self.router = router
@@ -33,10 +35,10 @@ public final class Server: @unchecked Sendable{
             switch state {
             case .ready:
                 if let port = self.listener.port {
-                    print("✅ Server lauscht auf Port \(port)")
+                    self.logger.info("✅ Server lauscht auf Port \(port)")
                 }
             case .failed(let error):
-                print("❌ Serverstart fehlgeschlagen: \(error.localizedDescription)")
+                self.logger.info("❌ Serverstart fehlgeschlagen: \(error.localizedDescription)")
             default:
                 break
             }
@@ -49,8 +51,7 @@ public final class Server: @unchecked Sendable{
         }
         
         listener.start(queue: .global())
-        
-        print("✅ Server lauscht auf Port \(listener.port!)")
+        self.logger.info("✅ Server lauscht auf Port \(listener.port!)")
     }
     
     

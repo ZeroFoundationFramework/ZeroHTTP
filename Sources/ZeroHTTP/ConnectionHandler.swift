@@ -88,16 +88,11 @@ final class ConnectionHandler: @unchecked Sendable {
         }
         
         headers["Connection"] = "close" // Wir schließen die Verbindung nach jeder Antwort
-    
-        
-        logger.dev("headers \(headers)")
 
         headers.forEach { (key, value) in
             responseString += "\(key): \(value)\r\n"
         }
         responseString += "\r\n"
-        
-        logger.dev("ResponseString from Headers. \(responseString)")
 
         var responseData = responseString.data(using: .utf8)!
         if let body = response.body {

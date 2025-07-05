@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/ZeroFoundationFramework/ZeroTemplate.git", from: "1.0.7"),
         .package(url: "https://github.com/ZeroFoundationFramework/ZeroErrors.git", from: "1.0.2"),
         .package(url: "https://github.com/ZeroFoundationFramework/ZeroLogger.git", from: "1.0.1"),
-        .package(url: "https://github.com/ZeroFoundationFramework/ZeroDI.git", from: "1.0.1"),
+        .package(url: "https://github.com/ZeroFoundationFramework/ZeroDI.git", from: "1.0.2"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.

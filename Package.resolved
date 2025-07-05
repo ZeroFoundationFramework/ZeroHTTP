@@ -1,13 +1,13 @@
 {
-  "originHash" : "068c99b7b86a0e3d0e4d1e5b1590e14a5ab7eb6a4ed5bc57e4d5f9b75b4ae915",
+  "originHash" : "8b1cdf8d1ab46ca9d9ca2144aa8d655b6b2081d285628441862a0746549b76ce",
   "pins" : [
     {
       "identity" : "zerodi",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ZeroFoundationFramework/ZeroDI.git",
       "state" : {
-        "revision" : "16bd475a89e101aae9bd973279d780a5de0e1565",
-        "version" : "1.0.1"
+        "revision" : "55d1f5a1c2df79be063e4450e52c073d0893cb88",
+        "version" : "1.0.2"
       }
     },
     {

@@ -14,7 +14,7 @@ public typealias RouteHandler = (HttpRequest) -> HttpResponse
 ///
 /// Each route maps a specific HTTP method and path to a handler closure
 /// that processes the request.
-public struct Route {
+public struct Route: Metadatable {
     /// The HTTP method this route responds to (e.g., GET, POST).
     public let method: HttpMethod
     
@@ -44,6 +44,27 @@ public struct Route {
         var newRoute = self
         newRoute.metadata[key] = value
         return newRoute
+    }
+    
+    
+    /// Erstellt eine neue GET-Route.
+    public static func get(_ path: String, handler: @escaping RouteHandler) -> Route {
+        return Route(method: .GET, path: path, handler: handler)
+    }
+    
+    /// Erstellt eine neue POST-Route.
+    public static func post(_ path: String, handler: @escaping RouteHandler) -> Route {
+        return Route(method: .POST, path: path, handler: handler)
+    }
+    
+    /// Erstellt eine neue PUT-Route.
+    public static func put(_ path: String, handler: @escaping RouteHandler) -> Route {
+        return Route(method: .PUT, path: path, handler: handler)
+    }
+    
+    /// Erstellt eine neue DELETE-Route.
+    public static func delete(_ path: String, handler: @escaping RouteHandler) -> Route {
+        return Route(method: .DELETE, path: path, handler: handler)
     }
 }
 

@@ -24,6 +24,8 @@ public struct HttpRequest {
     /// The optional body of the request, typically for POST or PUT requests.
     public let body: Data?
     
+    public var metadata: [String: Any] = [:]
+    
     /// Initializes a new `HttpRequest` instance.
     ///
     /// - Parameters:

@@ -59,7 +59,10 @@ public final class Router: @unchecked Sendable {
             }
             // Exact path matching
             else if route.path == request.path {
-                return route.handler(request)
+                
+                var requestWithMetaData = request
+                requestWithMetaData.metadata = route.metadata
+                return route.handler(requestWithMetaData)
             }
         }
         

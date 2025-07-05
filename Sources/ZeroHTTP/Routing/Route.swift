@@ -14,7 +14,9 @@ public typealias RouteHandler = (HttpRequest) -> HttpResponse
 ///
 /// Each route maps a specific HTTP method and path to a handler closure
 /// that processes the request.
-public struct Route: Metadatable {
+public struct Route: Metadatable, AnyRoute {
+    public var route: Route { self }
+
     /// The HTTP method this route responds to (e.g., GET, POST).
     public let method: HttpMethod
     

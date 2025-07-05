@@ -7,9 +7,12 @@
 
 import Foundation
 import ZeroErrors
+import ZeroLogger
 
 /// A thread-safe router that manages and dispatches requests to registered routes.
 public final class Router: @unchecked Sendable {
+    
+    private var logger: Logger = Logger(label: "zero.http.router")
     /// The shared singleton instance, allowing global access to the router.
     @MainActor public static let shared = Router()
     
@@ -50,6 +53,7 @@ public final class Router: @unchecked Sendable {
         let currentRoutes = self.routes
         
         for route in currentRoutes {
+            logger.dev("CurrentRoute \(route)")
             // Wildcard matching for paths ending in "*"
             if route.path.hasSuffix("*") {
                 let prefix = route.path.dropLast()
@@ -59,7 +63,6 @@ public final class Router: @unchecked Sendable {
             }
             // Exact path matching
             else if route.path == request.path {
-                
                 var requestWithMetaData = request
                 requestWithMetaData.metadata = route.metadata
                 return route.handler(requestWithMetaData)

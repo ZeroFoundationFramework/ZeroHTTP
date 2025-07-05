@@ -23,7 +23,9 @@ public struct Route {
     
     /// The closure that is executed when this route is matched.
     public let handler: RouteHandler
-
+    
+    public var metadata: [String: Any] = [:]
+    
     /// Initializes a new `Route`.
     ///
     /// - Parameters:
@@ -36,4 +38,12 @@ public struct Route {
         self.path = path
         self.handler = handler
     }
+    
+    /// Eine generische Methode, um beliebige Metadaten zu einer Route hinzuzufügen.
+    public func metadata(_ key: String, _ value: Any) -> Route {
+        var newRoute = self
+        newRoute.metadata[key] = value
+        return newRoute
+    }
 }
+

@@ -69,6 +69,9 @@ final class ConnectionHandler: @unchecked Sendable {
             return self.router(req)
         }
             
+        self.middlewares.forEach { middleware in
+            self.logger.info("Running Connectionhandler with Middleware \(middleware)")
+        }
         
         let chain = MiddlewareChain(middlewares: self.middlewares, responder: routerResponder)
             

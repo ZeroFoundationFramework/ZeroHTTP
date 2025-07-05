@@ -6,10 +6,11 @@
 //
 
 import Foundation
+import ZeroDI
 
 public protocol Controller: NSObjectProtocol {
 
-    init()
+    init(container: Container)
 
     @RouteBuilder var body: [Route] { get }
 }

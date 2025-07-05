@@ -6,8 +6,9 @@
 //
 
 import Foundation
+import ZeroDI
 
 /// Ein minimales, @objc-kompatibles Protokoll, das nur zur Laufzeit-Erkennung dient.
 @objc public protocol DiscoverableController: NSObjectProtocol {
-    init()
+    init(container: Container)
 }

@@ -65,6 +65,7 @@ public final class Router: @unchecked Sendable {
             else if route.path == request.path {
                 var requestWithMetaData = request
                 requestWithMetaData.metadata = route.metadata
+                self.logger.info("Metadata gesetzt für route \(route.path) -> \(route.metadata) = \(requestWithMetaData.metadata)")
                 return route.handler(requestWithMetaData)
             }
         }

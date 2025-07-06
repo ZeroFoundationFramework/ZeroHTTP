@@ -80,15 +80,8 @@ public final class Router: @unchecked Sendable {
                 // 5. Führe die Kette mit der angereicherten Anfrage aus.
                 return chain.run(request: requestWithMetaData)
             }
-            
-            return notFoundResponse()
         }
         
-        // If no route was matched, return a standard 404 response.
-        let body = resourceNotFound
-        var headers = HttpHeaders()
-        headers["Content-Type"] = "text/html; charset=utf-8"
-        
-        return HttpResponse(status: .notFound, statusPhrase: "Not Found", headers: headers, body: body.data(using: .utf8))
+        return notFoundResponse()
     }
 }

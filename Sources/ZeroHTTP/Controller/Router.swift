@@ -63,7 +63,7 @@ public final class Router: @unchecked Sendable {
                 }
             }
             // Exact path matching
-            if route.path == request.path {
+            else if route.path == request.path {
                 var requestWithMetaData = request
                 requestWithMetaData.metadata = route.metadata
                 self.logger.info("Metadata gesetzt für route \(route.path) -> \(route.metadata) = \(requestWithMetaData.metadata)")

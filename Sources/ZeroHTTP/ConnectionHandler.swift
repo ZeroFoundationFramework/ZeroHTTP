@@ -12,14 +12,12 @@ import ZeroLogger
 final class ConnectionHandler: @unchecked Sendable {
     private let connection: NWConnection
     private let parser = HTTPParser()
-    private let router: @Sendable (HttpRequest) -> HttpResponse
     private let middlewares: [Middleware]
     private var receivedData = Data()
     private var logger = Logger(label: "zero.http.server.connection")
 
-    init(connection: NWConnection, middlewares: [Middleware] = [], router: @escaping @Sendable (HttpRequest) -> HttpResponse) {
+    init(connection: NWConnection, middlewares: [Middleware] = []) {
         self.connection = connection
-        self.router = router
         self.middlewares = middlewares
     }
 
@@ -64,18 +62,7 @@ final class ConnectionHandler: @unchecked Sendable {
         guard let request = self.parser.parse(data: self.receivedData) else { return }
         self.receivedData.removeAll()
             
-    
-        let routerResponder: Responder = { req in
-            return self.router(req)
-        }
-            
-        self.middlewares.forEach { middleware in
-            self.logger.info("Running Connectionhandler with Middleware \(middleware)")
-        }
-        
-        let chain = MiddlewareChain(middlewares: self.middlewares, responder: routerResponder)
-            
-        let response = chain.run(request: request)
+        let response = Router.shared.handle(request: request, self.middlewares)
             
         self.send(response: response)
     }

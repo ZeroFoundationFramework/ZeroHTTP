@@ -46,7 +46,7 @@ public final class Server: @unchecked Sendable{
         
         listener.newConnectionHandler = { [weak self] newConnection in
             guard let self = self else { return }
-            let handler = ConnectionHandler(connection: newConnection, middlewares: self.middleware, router: self.router)
+            let handler = ConnectionHandler(connection: newConnection, middlewares: self.middleware)
             handler.start()
         }
         
